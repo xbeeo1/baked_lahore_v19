@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="sale_analysis_report_xlsx_details" model="ir.actions.report">
+        <field name="name">Sale Analysis Report</field>
+        <field name="model">sale.analysis.report</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">cno_baked_report.sale_analysis_report_id_xlsx</field>
+        <field name="report_file">cno_baked_report.sale_analysis_report_id_xlsx</field>
+    </record>
+
+    <record id="custom_paperformat" model="report.paperformat">
+            <field name="name">Custom</field>
+            <field name="default" eval="True" />
+            <field name="format">custom</field>
+            <field name="page_height">297</field>
+            <field name="page_width">210</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">50</field>
+            <field name="margin_bottom">20</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">50</field>
+            <field name="dpi">90</field>
+        </record>
+
+    <record id="action_expenses_voucher_report" model="ir.actions.report">
+        <field name="name">Expense Voucher</field>
+        <field name="model">expenses.voucher</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">cno_baked_report.expenses_voucher_report_template</field>
+        <field name="report_file">cno_baked_report.expenses_voucher_report_template</field>
+        <field name="paperformat_id" ref="cno_baked_report.custom_paperformat"/>
+        <field name="binding_type">report</field>
+        <field name="binding_model_id" ref="cno_baked_custom.model_expenses_voucher"/>
+        <field name="print_report_name">"Expense Voucher Report"</field>
+    </record>
+
+</odoo>

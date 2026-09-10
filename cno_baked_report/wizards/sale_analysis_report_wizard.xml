@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="sale_analysis_report_form_view" model="ir.ui.view">
+            <field name="name">sale.analysis.report.form</field>
+            <field name="model">sale.analysis.report</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="date_from"/>
+                            </group>
+                            <group>
+                                <field name="date_to"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Print" name="action_print" type="object" class="oe_highlight" data-hotkey="q"/>
+                        <button string="Cancel" class="btn btn-secondary" special="cancel" data-hotkey="x"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="sale_analysis_report_window_act" model="ir.actions.act_window">
+            <field name="name">Sale Analysis Report</field>
+            <field name="res_model">sale.analysis.report</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sale_analysis_report_form_view"/>
+            <field name="target">new</field>
+        </record>
+
+
+
+        <menuitem id="menu_sale_analysis_report"
+              name="Sale Analysis Report"
+              action="sale_analysis_report_window_act"
+              parent="point_of_sale.menu_point_rep"
+              sequence="10"/>
+
+
+
+    </data>
+
+</odoo>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="expenses_voucher_report_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <t t-foreach="docs" t-as="o">
+                    <h2 colspan="6" style="text-align: center;">
+                        Expense Voucher
+                    </h2>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <b>Voucher:</b>
+                                </div>
+                                <div class="col-8">
+                                    <span t-esc="o.voucher_no"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <b>Date:</b>
+                                </div>
+                                <div class="col-8">
+                                    <span t-esc="o.date.strftime('%d/%m/%Y')"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <b>MOP:</b>
+                                </div>
+                                <div class="col-8">
+                                    <span t-esc="o.mop_id.name"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-4">
+                                    <b>Payee:</b>
+                                </div>
+                                <div class="col-8">
+                                    <span t-esc="o.payee_id.name"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="o_has_total_table table o_main_table table-borderless" style="font-size: 14px;">
+                                <thead style="display: table-row-group">
+                                    <tr style="background-color: #b3cccc; color:#000000;">
+                                        <td style="font-weight: bold" class="text-center">Sr#</td>
+                                        <td style="font-weight: bold;" class="text-start">Accounting Head</td>
+                                        <td style="font-weight: bold;" class="text-start">Account Name</td>
+                                        <td style="font-weight: bold;" class="text-start">Description</td>
+                                        <td style="font-weight: bold;" class="text-center">Amount</td>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="sr" t-value="1"/>
+                                    <t t-set="total_amount" t-value="0.0"/>
+                                    <t t-foreach="o.expenses_voucher_line" t-as="line">
+                                        <tr>
+                                            <td class="text-center">
+                                                <t t-esc="sr"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.accounting_head_id.name"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="line.account_id.name"/>
+                                            </td>
+                                            <td >
+                                                <t t-esc="line.description"/>
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-esc="'{:,.0f}'.format(round(line.amount))"/>
+                                                <t t-set="total_amount" t-value="total_amount + line.amount"/>
+                                            </td>
+                                        </tr>
+
+                                        <t t-set="sr" t-value="sr + 1"/>
+                                    </t>
+                                    <tr style="background-color: #c2d6d6;">
+                                        <td></td>
+                                        <td style="font-weight: bold;">Total Amount</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-center" ><t t-esc="'{:,.0f}'.format(round(total_amount))"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:250px;">
+                        <div class="col-4 border-top text-center">
+                            <strong>Prepared by:</strong>
+                        </div>
+                        <div class="col-1"/>
+                        <div class="col-3 border-top text-center">
+                            <strong>Approved by:</strong>
+                        </div>
+
+                        <div class="col-1"/>
+                        <div class="col-3 border-top text-center">
+                            <strong>Received by:</strong>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+
+    </template>
+
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_expenses_voucher_report_wizard_form" model="ir.ui.view">
+            <field name="name">expenses.voucher.report.wizard.form</field>
+            <field name="model">expenses.voucher.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Expenses Voucher Report">
+                    <group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                        </group>
+                        <group>
+                            <field name="analytic_account_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_print_report" type="object" string="Print Report" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_expenses_voucher_report_wizard" model="ir.actions.act_window">
+            <field name="name">Expenses Voucher Report</field>
+            <field name="res_model">expenses.voucher.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_expenses_voucher_reporting"
+                  name="Reporting"
+                  parent="cno_baked_custom.main_menu_expenses_voucher"
+                  sequence="3"/>
+
+        <menuitem id="menu_action_expenses_voucher_report_wizard"
+                  name="Expenses Voucher Report"
+                  parent="menu_expenses_voucher_reporting"
+                  action="action_expenses_voucher_report_wizard"
+                  sequence="1"/>
+
+    </data>
+</odoo>

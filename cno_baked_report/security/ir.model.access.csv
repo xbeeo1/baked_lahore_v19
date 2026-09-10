@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_analysis_report,sale.analysis.report,model_sale_analysis_report,base.group_user,1,1,1,1
+access_quant_report_wizard,quant.report.wizard,model_quant_report_wizard,base.group_user,1,1,1,1
+access_stock_move_analytic_report_wizard,stock.move.analytic.report.wizard,model_stock_move_analytic_report_wizard,base.group_user,1,1,1,1
+access_expenses_voucher_report_wizard,expenses.voucher.report.wizard,model_expenses_voucher_report_wizard,cno_baked_custom.group_expenses_voucher_conf_menu_access,1,1,1,1
