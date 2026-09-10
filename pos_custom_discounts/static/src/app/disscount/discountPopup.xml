@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<templates id="template" xml:space="preserve">
+    <t t-name="WkDiscountPopup">
+        <Dialog size="'md'" header="false">
+                <div class="">
+                    <div class="modal-header" style="display: flex; justify-content: space-between;">
+                        <h2 class="modal-title">
+                            <t t-esc=" props.title || 'Discount List' " />
+                        </h2>
+                        <t t-if="this.pos.config.allow_custom_discount">
+                            <div class="total-order cusbutton customize btn btn-md btn-primary fw-bolder" t-on-click="click_customize">
+                                <i class="fa fa-tags"></i> Custom Discount
+                            </div>
+                        </t>
+                    </div>
+                    <div style="popup-body ">
+                        <div class="wk_popup_body d-flex flex-wrap gap-2 p-2">
+                            <t t-if="!this.env.services.pos.config.discount_ids.length">
+                                <div style="margin:12%" class="fw-bolder">
+                                    No discount is available for current POS Session, please add discount from configuration or create a custom discount.
+                                </div>
+                            </t>
+                            <t t-foreach="this.env.services.pos.config.discount_ids" t-as="item" t-key="item.id">
+                                <div class='wk_product_discount btn btn-light shadow-sm border border rounded-2 d-flex gap-2 flex-column p-2' t-on-click="click_wk_product_discount" t-att-id="item.id">
+                                    <span class="discount_percent bg-body-tertiary fw-bolder fs-1 product-name" t-att-id="item.id">
+                                        <t t-if="item.discount_percent%1!=0">
+                                            <t t-esc="env.services.utils.formatCurrency(item.discount_percent, false)"/>%
+                                        </t>
+                                        <t t-if="item.discount_percent%1==0">
+                                            <t t-esc="item.discount_percent "/>%
+                                        </t>
+                                    </span>
+                                    <span>
+                                        <t t-esc="item.name"/>
+                                    </span>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                    <div id="discount_error" style="background:#ffa566;height:22px;display:none">
+                        <span style="color:brown">
+                            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i >   Please select a discount</span>
+                    </div>
+                    <t t-set-slot="footer">
+                        <div class="d-flex w-100 justify-content-start gap-2">
+                            <button class="button btn btn-secondary o-default-button cancel" t-on-click="cancel">Cancel</button>
+                            <button class="button btn btn-primary o-default-button apply" t-on-click="click_apply">Selected Line</button>
+                            <button class="button btn btn-primary o-default-button apply_complete_order" t-on-click="click_apply_complete_order">Whole Order</button>
+                            <t t-if="props.selected_list_discount or (env.services.pos.getOrder().getSelectedOrderline().discount >0)">
+                                <button class="button btn btn-danger" t-on-click="click_remove_discount">Remove Discount</button>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+        </Dialog>
+    </t>
+
+    <t t-name="WkCustomDiscountPopup">
+        <Dialog title="props.title || 'Customize Discount'">
+                <div class="modal-body">
+                    <table class='receipt-total' style="font-weight: bold; font-size: 20px;">
+                        <tr>
+                            <th>Discount %</th>
+                            <td>
+                                <input id="discount" style="margin-left:20px; margin-top:4px; width: 118px;" type="number" name="discount"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Reason</th>
+                            <td>
+                                <textarea id="reason" style="margin-left:20px; margin-top:4px;" rows="4" cols="26" name="custom_discount_reason"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <div id="error_div" class="mt-2 border rounded" style="background:#ffa566;padding:10px;display:none">
+                        <span id="customize_error" style="color:brown"></span>
+                    </div>
+                </div>
+                <t t-set-slot="footer">
+                    <div class="d-flex w-100 justify-content-start gap-2">
+                        <button class="button btn btn-secondary o-default-button custom_cancel" t-on-click="cancel">Cancel</button>
+                        <button class="button btn btn-primary o-default-button current_product" t-on-click="click_current_product">Selected Line</button>
+                        <button class="button btn btn-primary o-default-button whole_order" t-on-click="click_whole_order">Whole Order</button>
+                        <t t-if="props.custom_discount">
+                            <button class="button btn btn-danger o-default-button remove_discount" t-on-click="click_remove_discount">Remove Discount</button>
+                        </t>
+                    </div>
+                </t>
+
+        </Dialog>
+    </t>
+</templates>

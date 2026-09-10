@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+<odoo>
+	<data>
+		<record id="pos_custom_dicount_inherit_pos_form_inherit" model="ir.ui.view">
+			<field name="name">pos.order</field>
+			<field name="model">pos.order</field>
+			<field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//list//field[@name='discount']" position="before">
+ 					<field name='custom_discount_reason'/>
+<!-- 					<field name='fixed_discount_amount'/>-->
+ 				</xpath>
+			</field>
+		</record>
+
+		<record id="pos_discount_form_view" model="ir.ui.view">
+			<field name="name">pos.custom.discount</field>
+			<field name="model">pos.custom.discount</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="form session">
+					<sheet>
+						<group>
+							<group>
+								<field name="name" id="name" placeholder="Discount Name"/>
+								<field style="width:50%" name='discount_percent'/>
+								<field style="width:50%" name='discount_cap'/>
+								<field  name='bank_dis_percent'/>
+								<field  name='account_debit_id' required="bank_dis_percent > 0"/>
+							</group>
+							<group>
+								<field name="available_in_pos" widget="many2many_tags"/>
+								<field name="description" id="discription" placeholder="Description for Internal Purpose"/>
+								<field  name='account_credit_id' required="bank_dis_percent > 0"/>
+								<field  name='vendor_bank_id' required="bank_dis_percent > 0"/>
+								<field  name='account_journal_id' required="bank_dis_percent > 0"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record id="pos_discount_tree_view" model="ir.ui.view">
+			<field name="name">pos.custom.discount</field>
+			<field name="model">pos.custom.discount</field>
+			<field name="type">list</field>
+			<field name="arch" type="xml">
+				<list string="tree session">
+					<field name="name"/>
+					<field name="discount_percent"/>
+					<field name="discount_cap"/>
+					<field  name='bank_dis_percent'/>
+					<field  name='vendor_bank_id'/>
+					<field name="account_debit_id"/>
+					<field name="account_credit_id"/>
+					<field name="account_journal_id"/>
+					<field name="description"/>
+				</list>
+			</field>
+		</record>
+
+		<record id="pos_discount_form_view_action" model="ir.actions.act_window">
+			<field name="name">POS Custom Discount</field>
+			<field name="res_model">pos.custom.discount</field>
+			<field name="view_mode">list,form</field>
+		</record>
+
+		<menuitem id="wk_pos_discount_menu" name="POS Discount" parent="point_of_sale.menu_point_config_product" action="pos_discount_form_view_action"/>
+	</data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2016-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- License URL : <https://store.webkul.com/license.html/> -->
+
+<odoo>
+	<record id="wk_custom_discount_view_pos_config_settings_form" model="ir.ui.view">
+		<field name="name">res.config.settings.custom.view</field>
+		<field name="model">res.config.settings</field>
+		<field name="inherit_id" ref="point_of_sale.res_config_settings_view_form" />
+		<field name="arch" type="xml">
+			<xpath expr="//block[@id='pos_accounting_section']" position="after">
+				<block title="Discounts" id="pos_Discounts_section">
+					<setting id="pos_discount_ids" string="Select Discounts" help="Choose discounts from the given list for current POS">
+						<field name="pos_discount_ids" widget="many2many_tags"/>
+					</setting>
+
+					<setting id="pos_allow_custom_discount" string="Allow Customize Discount" help="Check here to allow customize discount in current POS">
+						<field name="pos_allow_custom_discount"/>
+					</setting>
+					<setting invisible="not pos_allow_custom_discount" id="pos_allow_security_pin" string="Allow Security Pin" help="Check here to ask pin whenever seller click on custom discount button">
+						<field name="pos_allow_security_pin"/>
+					</setting>
+
+				</block>
+			</xpath>
+		</field>
+	</record>
+</odoo>

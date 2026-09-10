@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="Orderline"
+       t-inherit="point_of_sale.Orderline"
+       t-inherit-mode="extension">
+
+        <!-- Original Odoo discount percentage ko 2 decimal -->
+        <xpath expr="//li[hasclass('price-per-unit')]/em/t" position="replace">
+            <t t-esc="line.get_discount_display()"/>
+        </xpath>
+
+        <!-- Custom discount information -->
+        <xpath expr="//ul[hasclass('info-list')]" position="inside">
+
+            <li t-if="line.get_fixed_discount_amount() > 0"
+                id="custom_discount_reason"
+                class="text-info fw-bolder">
+
+                <t t-esc="line.get_custom_discount_reason()" />
+                Capped Amount Rs.
+                <t t-esc="line.get_fixed_discount_amount().toFixed(2)"/>
+            </li>
+
+            <li t-elif="line.get_custom_discount_reason()"
+                id="custom_discount_reason"
+                class="text-info fw-bolder">
+
+                <t t-esc="line.get_custom_discount_reason()" />
+            </li>
+
+        </xpath>
+
+    </t>
+
+</templates>
+
