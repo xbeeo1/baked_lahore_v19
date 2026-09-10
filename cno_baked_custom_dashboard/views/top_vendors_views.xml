@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_top_vendor" model="ir.actions.client">
+        <field name="name">Top Vendors</field>
+        <field name="tag">top_vendor_action</field>
+    </record>
+
+    <menuitem
+        id="menu_top_vendors"
+        name="Top Vendors"
+        parent="spreadsheet_dashboard.spreadsheet_dashboard_menu_root"
+        action="action_top_vendor"
+        sequence="20"/>
+
+</odoo>

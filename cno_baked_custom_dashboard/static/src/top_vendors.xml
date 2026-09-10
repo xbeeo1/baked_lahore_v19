@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+
+    <t t-name="cno_baked_custom_dashboard.TopVendors">
+
+        <div class="o_top_vendors">
+
+            <!-- Header + Date Filters -->
+            <div class="o_top_vendors_header d-flex justify-content-between align-items-center mb-3 flex-wrap gap-3">
+
+                <h2 class="mb-0">
+                    Top Vendors
+                </h2>
+
+                <div class="top-vendors-date-filters d-flex align-items-center gap-2">
+
+                    <!-- Vendor Search -->
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        placeholder="Search Vendor..."
+                        t-model="state.vendor_search"
+                        t-on-keydown="onVendorKeydown"
+                    />
+
+                    <button
+                        class="btn btn-sm btn-primary"
+                        t-on-click="onVendorSearch"
+                    >
+                        Search
+                    </button>
+
+                    <!-- From Date -->
+                    <label class="mb-0">
+                        From
+                    </label>
+
+                    <input
+                        type="date"
+                        class="form-control form-control-sm top-vendors-date-input"
+                        t-model="state.date_from"
+                        t-on-change="onDateChange"
+                    />
+
+                    <!-- To Date -->
+                    <label class="mb-0">
+                        To
+                    </label>
+
+                    <input
+                        type="date"
+                        class="form-control form-control-sm top-vendors-date-input"
+                        t-model="state.date_to"
+                        t-on-change="onDateChange"
+                    />
+                    <button class="btn btn-sm btn-primary" t-on-click="onRefresh">
+                        Refresh
+                      </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Vendors Table -->
+            <div class="o_top_vendors_table">
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>
+                                Vendor
+                            </th>
+
+                            <th>
+                                Quantity
+                            </th>
+
+                            <th>
+                                Revenue
+                            </th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        <!-- Loading -->
+                        <t t-if="state.loading">
+
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    Loading...
+                                </td>
+                            </tr>
+
+                        </t>
+
+
+                        <!-- No Vendors -->
+                        <t t-elif="!state.vendors.length">
+
+                            <tr>
+                                <td colspan="3" class="text-center">
+                                    No vendors found
+                                </td>
+                            </tr>
+
+                        </t>
+
+
+                        <!-- Vendors -->
+                        <t t-else="">
+
+                            <t
+                                t-foreach="state.vendors"
+                                t-as="vendor"
+                                t-key="vendor.vendor_id"
+                            >
+
+                                <tr>
+
+                                    <!-- Vendor -->
+                                    <td>
+                                        <span t-esc="vendor.vendor_name"/>
+                                    </td>
+
+
+                                    <!-- Quantity -->
+                                    <td>
+                                        <span t-esc="vendor.quantity"/>
+                                    </td>
+
+
+                                    <!-- Revenue -->
+                                    <td>
+                                        <span t-esc="formatRevenue(vendor.revenue)"/>
+                                    </td>
+
+                                </tr>
+
+                            </t>
+
+                        </t>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </t>
+
+</templates>
