@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="ControlButtonCustome"
+       t-inherit="point_of_sale.ControlButtons"
+       t-inherit-mode="extension">
+
+        <!-- Refund Button -->
+        <xpath expr="//button[.//i[contains(@class,'fa-undo')]]" position="replace">
+            <t t-if="has_refund and this.pos.cashier._role != 'minimal'">
+                <button t-att-class="buttonClass" t-on-click="() => this.clickRefund()">
+                    <i class="fa fa-undo me-1"/>
+                    Refunds
+                </button>
+            </t>
+        </xpath>
+
+        <!-- Customer Note Button (NoteButton in Odoo 19) -->
+        <xpath expr="//NoteButton[@label.translate='Customer Note']" position="replace">
+            <t t-if="has_customer_note">
+                <NoteButton
+                    label.translate="Customer Note"
+                    class="buttonClass"
+                    icon="'fa fa-sticky-note'"/>
+            </t>
+        </xpath>
+
+        <!-- Pricelist Button -->
+        <xpath expr="//button[contains(@class,'o_pricelist_button')]" position="replace">
+            <t t-if="has_pricelist and this.pos.cashier._role != 'minimal'">
+                <button class="o_pricelist_button" t-att-class="buttonClass"
+                        t-on-click="() => this.clickPricelist()">
+                    <i class="fa fa-th-list me-2"/>
+                    <t t-if="currentOrder?.pricelist_id"
+                       t-esc="currentOrder.pricelist_id.display_name"/>
+                    <t t-else="">Pricelist</t>
+                </button>
+            </t>
+        </xpath>
+
+        <!-- Cancel Order -->
+        <xpath expr="//button[.//i[contains(@class,'fa-trash')]]" position="replace">
+            <t t-if="has_cancel and this.pos.cashier._role != 'minimal'">
+                <button t-att-class="buttonClass"
+                        t-on-click="() => this.pos.onDeleteOrder(this.pos.getOrder())">
+                    <i class="fa fa-trash me-1"/>
+                    Cancel Order
+                </button>
+            </t>
+        </xpath>
+
+        <!-- Actions (More Button) -->
+        <xpath expr="//button[contains(@class,'more-btn')]" position="replace">
+            <t t-if="has_actions">
+                <button class="btn btn-light btn-lg flex-shrink-0 ms-auto"
+                        t-if="!props.showRemainingButtons and !ui.isSmall and props.onClickMore"
+                        t-on-click="props.onClickMore">
+                    Actions
+                </button>
+            </t>
+        </xpath>
+
+    </t>
+
+</templates>
