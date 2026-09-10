@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <!-- Home Card -->
+
+<!--    <template id="portal_my_home_products"-->
+<!--              name = 'Product'-->
+<!--              inherit_id="portal.portal_my_home"-->
+<!--              priority="30">-->
+
+<!--        <xpath expr="//div[contains(@class,'o_portal_docs')]" position="inside">-->
+
+<!--            <t t-call="portal.portal_docs_entry">-->
+<!--                <t t-set="title">Products</t>-->
+<!--                <t t-set="url" t-value="'/my/products'"/>-->
+<!--                <t t-set="text">View your products</t>-->
+<!--                <t t-set="placeholder_count" t-value="'product_count'"/>-->
+<!--            </t>-->
+
+<!--        </xpath>-->
+
+<!--    </template>-->
+
+
+
+    <!-- Product List -->
+
+    <template id="portal_my_products"
+              name="Vendor Products">
+
+        <t t-call="portal.portal_layout">
+
+            <div class="container mt-4">
+
+                <h3>My Products</h3>
+
+                <table class="table table-bordered table-hover">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Sr.</th>
+
+                            <th>Product Name</th>
+
+                            <th>UOM</th>
+
+                            <th>On Hand Qty</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <t t-set="sr" t-value="1"/>
+
+                        <t t-foreach="products" t-as="product">
+
+                            <tr>
+
+                                <td>
+                                    <t t-esc="sr"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="product.name"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="product.uom_id.name"/>
+                                </td>
+
+                                <td>
+                                    <t t-esc="product.qty_available"/>
+                                </td>
+
+                            </tr>
+
+                            <t t-set="sr" t-value="sr+1"/>
+
+                        </t>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </t>
+
+    </template>
+
+</odoo>
