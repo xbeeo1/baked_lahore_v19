@@ -1,0 +1,60 @@
+<odoo>
+    <data>
+
+        <record id="stock_picking_view_inherit" model="ir.ui.view">
+                <field name="name">stock.picking.form.inherit</field>
+                <field name="model">stock.picking</field>
+                <field name="inherit_id" ref="stock.view_picking_form"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='move_ids']/list//field[@name='product_uom_qty']" position="before">
+                        <field name="expiry_date" invisible="picking_code != 'incoming'"/>
+
+                    </xpath>
+                </field>
+          </record>
+
+        <record id="view_stock_move_list_custom" model="ir.ui.view">
+            <field name="name">stock.move.tree.custom</field>
+            <field name="model">stock.move</field>
+            <field name="arch" type="xml">
+                <list string="Stock Moves" create="false" delete="false" editable="bottom">
+                    <field name="product_id" readonly="1"/>
+                    <field name="analytic_distribution" widget="analytic_distribution" options="{'business_domain': 'stock_move'}" optional="show"/>
+                    <field name="analytic_precision" column_invisible="1"/>
+                    <field name="origin" readonly="1"/>
+                    <field name="expiry_date" readonly="1"/>
+                    <field name="Qty"/>
+                    <button name="action_create_scrap"
+                    type="object"
+                    string="Create Scrap Order"
+                    class="btn-primary" invisible="scrap_created"/>
+                    <field name="allocation_state" readonly="1"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_expire_product" model="ir.actions.act_window">
+            <field name="name">Expire Product</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_mode">list</field>
+             <field name="domain">[('picking_type_id.code', '=', 'incoming')]</field>
+            <field name="view_id" ref="view_stock_move_list_custom"/>
+        </record>
+
+
+        <menuitem
+                id="menu_expire_product"
+                name="Expire Product"
+                action="action_expire_product"
+                parent="stock.menu_stock_root"
+                sequence="5"/>
+    </data>
+
+</odoo>
+
+
+
+
+
+
+

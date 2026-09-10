@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="account_move_line_analytic_distribution_permission"
+                model="ir.ui.view">
+
+            <field name="name">
+                account.move.line.analytic.distribution.permission
+            </field>
+
+            <field name="model">account.move</field>
+
+            <field name="inherit_id" ref="account.view_move_form"/>
+
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='line_ids']/list"
+                       position="inside">
+
+                    <field name="allow_edit_analytic_distribution"
+                           column_invisible="True"/>
+
+                </xpath>
+
+                <xpath expr="//field[@name='line_ids']/list/field[@name='analytic_distribution']"
+                       position="attributes">
+
+                    <attribute name="readonly">
+                        not allow_edit_analytic_distribution
+                    </attribute>
+
+                </xpath>
+
+            </field>
+        </record>
+
+
+
+
+    </data>
+
+</odoo>

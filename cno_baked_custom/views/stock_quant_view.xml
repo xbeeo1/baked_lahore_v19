@@ -1,0 +1,23 @@
+<odoo>
+    <record id="view_stock_quant_tree_vendor" model="ir.ui.view">
+        <field name="name">stock.quant.tree.vendor</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="before">
+                <field name="vendor_id"/>
+            </field>
+<!--            <field name="product_id" position="after">-->
+<!--                <field name="cost_price"/>-->
+<!--            </field>-->
+            <field name="inventory_diff_quantity" position="after">
+                <field name="adjustment_cost"/>
+            </field>
+            <field name="product_id" position="after">
+                <field name="last_move_date" optional="hide"/>
+                <field name="last_move_quantity" optional="hide"/>
+                <field name="last_move_user_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+</odoo>

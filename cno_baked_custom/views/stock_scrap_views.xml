@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_stock_scrap_list_inherit_analytic" model="ir.ui.view">
+        <field name="name">stock.scrap.list.inherit.analytic</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="analytic_distribution"
+                       widget="analytic_distribution"
+                       optional="show"/>
+                <field name="analytic_precision" column_invisible="1"/>
+            </field>
+        </field>
+    </record>
+    <record id="view_stock_scrap_form_inherit_analytic" model="ir.ui.view">
+        <field name="name">stock.scrap.form.inherit.analytic</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="analytic_distribution"
+                       widget="analytic_distribution"
+                       optional="show"/>
+                <field name="analytic_precision" column_invisible="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>

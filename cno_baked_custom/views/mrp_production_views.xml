@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="mrp_production_form_inherit_8_decimal" model="ir.ui.view">
+            <field name="name">mrp.production.form.8.decimal</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='move_raw_ids']//field[@name='product_uom_qty'][1]"
+                       position="attributes">
+                    <attribute name="digits">[16,8]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_raw_ids']//field[@name='product_uom_qty'][2]"
+                       position="attributes">
+                    <attribute name="digits">[16,8]</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='move_raw_ids']//field[@name='quantity']"
+                       position="attributes">
+                    <attribute name="digits">[16,8]</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

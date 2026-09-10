@@ -1,0 +1,84 @@
+<odoo>
+    <data>
+
+        <record id="view_product_template_list_inherit" model="ir.ui.view">
+            <field name="name">product.template.list.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="categ_id"/>
+                    <field name="vendor_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_template_only_form_view_inherit" model="ir.ui.view">
+            <field name="name">product.template.only.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='barcode']" position="before">
+                    <field name="margin_percent"/>
+                </xpath>
+                <xpath expr="//notebook/page[last()]" position="after">
+                    <page name="product_info" string="Product Info">
+                        <group>
+                            <group string="Product Information">
+                                <field name="business_type"/>
+                                <field name="vendor_id"/>
+                                <field name="product_owner_id"/>
+                                <field name="cogs_basis_id"/>
+                                <field name="profit_classification_id"/>
+                                <field name="stream"/>
+                                <field name="brand"/>
+                                <field name="commission_per"/>
+                            </group>
+                            <group string="Purchase Entry"
+                                   invisible="business_type != 'commission' or not business_type">
+                                <field name="payable_suppl_2221001_id" required="business_type == 'commission'"/>
+                                <!--                                <field name="stock_hand_1125001_id" />-->
+                                <!--                                <field name="account_debit_id" />-->
+                                <field name="account_credit_id" required="business_type == 'commission'"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Sale &amp; CGS">
+                                <field name="commission_based_sale" required="business_type == 'commission'"
+                                       invisible="business_type != 'commission' or not business_type"/>
+                                <field name="payable_to_supplier_cr" required="1"/>
+                                <!--                                <field name="commission_asset_cr" />-->
+                                <!--                                <field name="inventory_vendor_cr" />-->
+                                <field name="cost_of_goods_cr" required="business_type == 'commission'"
+                                       invisible="business_type != 'commission' or not business_type"/>
+                                <field name="commission_cgs" required="business_type == 'commission'"
+                                       invisible="business_type != 'commission' or not business_type"/>
+                            </group>
+                            <group string="Commission Income">
+                                <field name="commission_income" required="business_type == 'commission'"
+                                       invisible="business_type != 'commission' or not business_type"/>
+                                <field name="commission_tax" required="business_type == 'commission'"
+                                       invisible="business_type != 'commission' or not business_type"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Expiry Adjustment">
+
+                                <field name="cost_of_goods_exp_adjustment" required="1"/>
+                                <field name="commission_exp_adjustment" required="1"/>
+                                <field name="inventory_vendor_exp_Adjustment_cr" required="1"/>
+                                <field name="expiration_per" required="1"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>
