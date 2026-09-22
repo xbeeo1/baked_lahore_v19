@@ -21,7 +21,7 @@
 #############################################################################
 {
     'name': 'Xbo Hide Any Menu User Wise',
-    'version': '19.0.1.0.0',
+    'version': '19.0.0.0',
     'category': 'Extra Tools',
     'summary': 'This Module Helps To Hide any Menu items user wise.',
     'description': """This module provides functionality to hide or restrict menu 
@@ -39,7 +39,6 @@
         'views/ir_ui_menu_views.xml',
     ],
     'license': 'LGPL-3',
-    'images': ['static/description/banner.jpg'],
     'installable': True,
     'auto_install': False,
     'application': False,
