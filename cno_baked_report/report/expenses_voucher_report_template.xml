@@ -56,7 +56,7 @@
                         <div class="col-12">
                             <table class="o_has_total_table table o_main_table table-borderless" style="font-size: 14px;">
                                 <thead style="display: table-row-group">
-                                    <tr style="background-color: #b3cccc; color:#000000;">
+                                    <tr style="background-color: #595959 !important; color:#ffffff !important;">
                                         <td style="font-weight: bold" class="text-center">Sr#</td>
                                         <td style="font-weight: bold;" class="text-start">Accounting Head</td>
                                         <td style="font-weight: bold;" class="text-start">Account Name</td>
@@ -90,7 +90,7 @@
 
                                         <t t-set="sr" t-value="sr + 1"/>
                                     </t>
-                                    <tr style="background-color: #c2d6d6;">
+                                    <tr style="background-color: #d9d9d9 !important;">
                                         <td></td>
                                         <td style="font-weight: bold;">Total Amount</td>
                                         <td></td>

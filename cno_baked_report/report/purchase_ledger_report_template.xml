@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================================================
+         REPORT
+         ========================================================= -->
+    <template id="report_purchase_ledger">
+        <t t-call="web.html_container">
+            <t t-call="cno_baked_report.report_purchase_ledger_document"/>
+        </t>
+    </template>
+
+
+    <!-- =========================================================
+         REPORT DOCUMENT
+         ========================================================= -->
+    <template id="report_purchase_ledger_document">
+        <t t-call="web.external_layout">
+
+            <!-- =================================================
+                 PAGE CONTENT
+                 ================================================= -->
+            <div class="page ledger-page"
+                 style="font-size:11px; color:#263238;">
+
+                <style>
+
+                    /* =================================================
+                       PREMIUM LEDGER THEME
+                       ================================================= */
+
+                    .ledger-page {
+                        font-family: Arial, Helvetica, sans-serif;
+                    }
+
+                    /* ---------- Report Title ---------- */
+
+                    .ledger-title {
+                        color:#17365D;
+                        font-size:25px;
+                        font-weight:700;
+                        letter-spacing:.3px;
+                        margin:0;
+                    }
+
+                    .ledger-subtitle {
+                        color:#607D8B;
+                        font-size:11px;
+                        margin-top:4px;
+                    }
+
+
+                    /* ---------- Information Boxes ---------- */
+
+                    .ledger-info {
+                        margin-top:12px;
+                        margin-bottom:18px;
+                    }
+
+                    .info-box {
+                        background:#F4F7FA;
+                        border:1px solid #DCE4EA;
+                        border-radius:4px;
+                        padding:9px 12px;
+                    }
+
+                    .info-label {
+                        color:#78909C;
+                        font-size:9px;
+                        text-transform:uppercase;
+                        letter-spacing:.6px;
+                        font-weight:bold;
+                    }
+
+                    .info-value {
+                        color:#263238;
+                        font-size:12px;
+                        font-weight:bold;
+                        margin-top:3px;
+                    }
+
+
+                    /* =================================================
+                       LEDGER TABLE
+                       ================================================= */
+
+                    .o_ledger_table {
+                        width:100%;
+                        table-layout:fixed;
+                        border-collapse:separate !important;
+                        border-spacing:0;
+                        margin-bottom:22px;
+
+                        border:1px solid #D8E0E6 !important;
+                        border-radius:4px;
+                        overflow:hidden;
+                    }
+
+                    .o_ledger_table th,
+                    .o_ledger_table td {
+                        border-right:1px solid #E1E7EB !important;
+                        border-bottom:1px solid #E5EAEE !important;
+                    }
+
+                    .o_ledger_table th:last-child,
+                    .o_ledger_table td:last-child {
+                        border-right:none !important;
+                    }
+
+                    .o_ledger_table tbody tr:last-child td {
+                        border-bottom:none !important;
+                    }
+
+
+                    /* =================================================
+                       ACCOUNT HEADER
+                       ================================================= */
+
+                    .account-meta {
+                        background:#EAF0F6 !important;
+                        color:#17365D !important;
+                        font-weight:bold;
+                        padding:8px 10px !important;
+                    }
+
+                    .account-meta-right {
+                        background:#EAF0F6 !important;
+                        color:#455A64 !important;
+                        font-weight:bold;
+                        padding:8px 10px !important;
+                        text-align:right;
+                    }
+
+
+                    /* =================================================
+                       TABLE COLUMN HEADER
+                       ================================================= */
+
+                    .ledger-head {
+                        background:#17365D !important;
+                        color:#FFFFFF !important;
+
+                        font-size:12px;
+                        letter-spacing:.2px;
+
+                        padding:7px 8px !important;
+
+                        font-weight:bold;
+
+                        border-color:#17365D !important;
+                    }
+
+
+                    /* =================================================
+                       ACCOUNT TOTAL
+                       ================================================= */
+
+                    .account-total {
+                        background:#F5F8FB !important;
+                        color:#263238 !important;
+                        font-weight:bold;
+                    }
+
+                    .account-total td {
+                        padding:8px 8px !important;
+                        background:#F5F8FB !important;
+                    }
+
+                    .account-name {
+                        color:#17365D !important;
+                        font-weight:bold;
+                    }
+
+
+                    /* =================================================
+                       LEDGER DETAIL ROWS
+                       ================================================= */
+
+                    .ledger-line td {
+                        padding:6px 8px !important;
+                        vertical-align:middle;
+                    }
+
+                    .ledger-line:nth-child(even) {
+                        background:#FAFBFC !important;
+                    }
+
+                    .line-description {
+                        padding-left:20px !important;
+                        color:#37474F !important;
+
+                        word-wrap:break-word;
+                        overflow-wrap:break-word;
+                    }
+
+                    .partner-name {
+                        color:#4F7194 !important;
+                        font-weight:500;
+                    }
+
+
+                    /* =================================================
+                       AMOUNTS
+                       ================================================= */
+
+                    .amount {
+                        color:#263238 !important;
+                        white-space:nowrap;
+                    }
+
+                    .muted-amount {
+                        color:#B0BEC5 !important;
+                    }
+
+
+                    /* =================================================
+                       GRAND TOTAL
+                       ================================================= */
+
+                    .grand-total {
+                        background:#17365D !important;
+                        color:#FFFFFF !important;
+                    }
+
+                    .grand-total td {
+                        background:#17365D !important;
+                        color:#FFFFFF !important;
+
+                        border:none !important;
+
+                        padding:11px 9px !important;
+                    }
+
+                    .grand-total strong,
+                    .grand-total span {
+                        color:#FFFFFF !important;
+                    }
+
+                    .grand-label {
+                        color:#FFFFFF !important;
+
+                        font-size:12px;
+                        font-weight:bold;
+                        letter-spacing:.2px;
+                    }
+
+                    .grand-amount {
+                        color:#FFFFFF !important;
+
+                        font-size:12px;
+                        font-weight:bold;
+                    }
+
+
+                    /* =================================================
+                       FOOTER
+                       ================================================= */
+
+                    .ledger-footer {
+                        font-size:9px;
+                        color:#78909C;
+                        padding-top:8px;
+                    }
+
+                    .ledger-footer-line {
+                        border-top:1px solid #D8E0E6;
+                        padding-top:6px;
+                    }
+
+                    .page-number {
+                        color:#17365D !important;
+                        font-weight:bold;
+                    }
+
+
+                    /* =================================================
+                       PDF PAGE BREAK
+                       ================================================= */
+
+                    .account-block {
+                        page-break-inside:avoid;
+                    }
+
+                </style>
+
+
+                <!-- =================================================
+                     REPORT HEADER
+                     ================================================= -->
+
+                <div class="row"
+                     style="margin-bottom:4px;">
+
+                    <!-- Left side intentionally empty because
+                         company information comes from external_layout -->
+                    <div class="col-7">
+                        <div style="padding-top:5px;">
+
+                            <div class="ledger-title">
+                                General Ledger
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                    <!-- Vendor -->
+                    <div class="col-5 text-end">
+
+                        <div class="info-box"
+                             style="text-align:left;">
+
+                            <div class="info-label">
+                                Vendor
+                            </div>
+
+                            <div class="info-value">
+                                <t t-esc="partner.name if partner else 'All Vendors'"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     REPORT PERIOD / SUMMARY
+                     ================================================= -->
+
+                <div class="row ledger-info">
+
+                    <div class="col-4">
+
+                    </div>
+
+
+                    <div class="col-4">
+
+                        <div class="info-box">
+
+                            <div class="info-label">
+                                From
+                            </div>
+
+                            <div class="info-value">
+                                <span t-esc="'/'.join(data.get('date_from').split('-')[::-1])"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-4">
+
+                        <div class="info-box">
+
+                            <div class="info-label">
+                                To
+                            </div>
+
+                            <div class="info-value">
+                                <span t-esc="'/'.join(data.get('date_to').split('-')[::-1])"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACCOUNT BLOCKS
+                     ================================================= -->
+
+                <t t-foreach="account_blocks" t-as="block">
+
+                    <div class="account-block">
+
+                        <table class="table table-sm o_ledger_table">
+
+                            <!-- Column widths -->
+                            <colgroup>
+                                <col style="width:34%;"/>
+                                <col style="width:12%;"/>
+                                <col style="width:10%;"/>
+                                <col style="width:12%;"/>
+                                <col style="width:12%;"/>
+                                <col style="width:11%;"/>
+                                <col style="width:11%;"/>
+                            </colgroup>
+
+
+                            <thead>
+
+                                <!-- =================================
+                                     COLUMN HEADINGS
+                                     ================================= -->
+
+                                <tr>
+
+                                    <th class="ledger-head"
+                                        style="text-align:left;">
+                                        Description
+                                    </th>
+
+                                    <th class="ledger-head"
+                                        style="text-align:right;">
+                                        Date
+                                    </th>
+
+                                    <th class="ledger-head"
+                                        style="text-align:center;">
+                                        Partner
+                                    </th>
+
+                                    <th class="ledger-head"
+                                        style="text-align:center;">
+                                        Currency
+                                    </th>
+
+                                    <th class="ledger-head"
+                                        style="text-align:right;">
+                                        Debit
+                                    </th>
+
+                                    <th class="ledger-head"
+                                        style="text-align:right;">
+                                        Credit
+                                    </th>
+
+                                    <th class="ledger-head"
+                                        style="text-align:right;">
+                                        Balance
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                <!-- =================================
+                                     ACCOUNT TOTAL / SUBTOTAL
+                                     ================================= -->
+
+                                <tr class="account-total">
+
+                                    <td style="text-align:left;">
+
+                                        <span class="account-name">
+
+                                            <span t-esc="block['account'].code"/>
+
+                                            <span style="margin-left:5px;"
+                                                  t-esc="block['account'].name"/>
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+
+
+                                    <td class="text-end amount">
+
+                                        <strong
+                                            t-esc="'{:,.2f} Rs.'.format(block['total_debit'])"/>
+
+                                    </td>
+
+
+                                    <td class="text-end amount">
+
+                                        <strong
+                                            t-esc="'{:,.2f} Rs.'.format(block['total_credit'])"/>
+
+                                    </td>
+
+
+                                    <td class="text-end amount">
+
+                                        <strong
+                                            t-attf-class="#{'muted-amount' if not block['closing_balance'] else ''}"
+                                            t-esc="'{:,.2f} Rs.'.format(block['closing_balance'])"/>
+
+                                    </td>
+
+                                </tr>
+
+
+                                <!-- =================================
+                                     TRANSACTION LINES
+                                     ================================= -->
+
+                                <t t-foreach="block['lines']" t-as="line">
+
+                                    <tr class="ledger-line">
+
+                                        <!-- Description -->
+
+                                        <td class="line-description">
+
+                                            <span t-esc="line['name']"/>
+
+                                        </td>
+
+
+                                        <!-- Date -->
+
+                                        <td class="text-end">
+
+                                            <span
+                                                t-esc="line['date'].strftime('%d/%m/%Y') if line['date'] else ''"/>
+
+                                        </td>
+
+
+                                        <!-- Partner -->
+
+                                        <td class="text-center">
+
+                                            <span class="partner-name"
+                                                  t-esc="line['partner']"/>
+
+                                        </td>
+
+
+                                        <!-- Currency -->
+
+                                        <td class="text-center"
+                                            t-esc="line['currency']"/>
+
+
+                                        <!-- Debit -->
+
+                                        <td class="text-end amount">
+
+                                            <span
+                                                t-attf-class="#{'muted-amount' if not line['debit'] else ''}"
+                                                t-esc="'{:,.2f} Rs.'.format(line['debit'])"/>
+
+                                        </td>
+
+
+                                        <!-- Credit -->
+
+                                        <td class="text-end amount">
+
+                                            <span
+                                                t-attf-class="#{'muted-amount' if not line['credit'] else ''}"
+                                                t-esc="'{:,.2f} Rs.'.format(line['credit'])"/>
+
+                                        </td>
+
+
+                                        <!-- Balance -->
+
+                                        <td class="text-end amount">
+
+                                            <span
+                                                t-attf-class="#{'muted-amount' if not line['balance'] else ''}"
+                                                t-esc="'{:,.2f} Rs.'.format(line['balance'])"/>
+
+                                        </td>
+
+                                    </tr>
+
+                                </t>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </t>
+
+
+                <!-- =================================================
+                     GRAND TOTAL
+                     ================================================= -->
+
+                <table class="table table-sm o_ledger_table"
+                       style="
+                           margin-bottom:18px;
+                           border:none !important;
+                           border-radius:4px;
+                       ">
+
+                    <colgroup>
+                        <col style="width:34%;"/>
+                        <col style="width:12%;"/>
+                        <col style="width:10%;"/>
+                        <col style="width:12%;"/>
+                        <col style="width:12%;"/>
+                        <col style="width:11%;"/>
+                        <col style="width:11%;"/>
+                    </colgroup>
+
+
+                    <tbody>
+
+                        <tr class="grand-total"
+                            style="
+                                background:#17365D !important;
+                                color:#FFFFFF !important;
+                            ">
+
+                            <!-- Label -->
+
+                            <td class="grand-label"
+                                style="
+                                    background:#17365D !important;
+                                    color:#FFFFFF !important;
+                                    padding:11px 9px !important;
+                                    border:none !important;
+                                ">
+
+                                <strong style="color:#FFFFFF !important;">
+                                    Total General Ledger
+                                </strong>
+
+                            </td>
+
+
+                            <td style="
+                                background:#17365D !important;
+                                border:none !important;
+                            ">
+                            </td>
+
+                            <td style="
+                                background:#17365D !important;
+                                border:none !important;
+                            ">
+                            </td>
+
+                            <td style="
+                                background:#17365D !important;
+                                border:none !important;
+                            ">
+                            </td>
+
+
+                            <!-- Grand Debit -->
+
+                            <td class="text-end grand-amount"
+                                style="
+                                    background:#17365D !important;
+                                    color:#FFFFFF !important;
+                                    padding:11px 9px !important;
+                                    border:none !important;
+                                ">
+
+                                <strong style="color:#FFFFFF !important;">
+                                    <span style="color:#FFFFFF !important;"
+                                          t-esc="'{:,.2f} Rs.'.format(grand_total_debit)"/>
+                                </strong>
+
+                            </td>
+
+
+                            <!-- Grand Credit -->
+
+                            <td class="text-end grand-amount"
+                                style="
+                                    background:#17365D !important;
+                                    color:#FFFFFF !important;
+                                    padding:11px 9px !important;
+                                    border:none !important;
+                                ">
+
+                                <strong style="color:#FFFFFF !important;">
+                                    <span style="color:#FFFFFF !important;"
+                                          t-esc="'{:,.2f} Rs.'.format(grand_total_credit)"/>
+                                </strong>
+
+                            </td>
+
+
+                            <!-- Grand Balance -->
+
+                            <td class="text-end grand-amount"
+                                style="
+                                    background:#17365D !important;
+                                    color:#FFFFFF !important;
+                                    padding:11px 9px !important;
+                                    border:none !important;
+                                ">
+
+                                <strong style="color:#FFFFFF !important;">
+                                    <span style="color:#FFFFFF !important;"
+                                          t-esc="'{:,.2f} Rs.'.format(grand_total_balance)"/>
+                                </strong>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- =====================================================
+                 FOOTER
+
+                 IMPORTANT:
+                 Footer is OUTSIDE .page so Odoo external_layout
+                 handles it as a real PDF footer.
+                 ===================================================== -->
+
+            <div class="footer"
+                 style="
+                     font-size:9px;
+                     color:#78909C;
+                     padding-top:8px;
+                 ">
+
+                <div style="
+                    border-top:1px solid #D8E0E6;
+                    padding-top:6px;
+                ">
+
+                    <div class="row">
+
+                        <!-- Left -->
+
+                        <div class="col-6 text-start">
+
+                            <span style="color:#78909C;">
+                                Purchase Base Ledger Report
+                            </span>
+
+                        </div>
+
+
+                        <!-- Right -->
+
+                        <div class="col-6 text-end">
+
+                            <span style="color:#78909C;">
+                                Page
+                            </span>
+
+                            <span class="page"
+                                  style="
+                                      color:#17365D !important;
+                                      font-weight:bold;
+                                  ">
+                            </span>
+
+                            <span style="color:#78909C;">
+                                of
+                            </span>
+
+                            <span class="topage"
+                                  style="
+                                      color:#17365D !important;
+                                      font-weight:bold;
+                                  ">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </t>
+    </template>
+
+</odoo>
+

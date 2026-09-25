@@ -3,3 +3,5 @@ access_sale_analysis_report,sale.analysis.report,model_sale_analysis_report,base
 access_quant_report_wizard,quant.report.wizard,model_quant_report_wizard,base.group_user,1,1,1,1
 access_stock_move_analytic_report_wizard,stock.move.analytic.report.wizard,model_stock_move_analytic_report_wizard,base.group_user,1,1,1,1
 access_expenses_voucher_report_wizard,expenses.voucher.report.wizard,model_expenses_voucher_report_wizard,cno_baked_custom.group_expenses_voucher_conf_menu_access,1,1,1,1
+access_purchase_ledger_wizard,purchase.ledger.wizard,model_purchase_ledger_wizard,account.group_account_readonly,1,1,1,1
+access_purchase_ledger_wizard_invoice,purchase.ledger.wizard.invoice,model_purchase_ledger_wizard,account.group_account_invoice,1,1,1,1

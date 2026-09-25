@@ -49,16 +49,20 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
 
         _logger.info("Normalized date_from=%s date_to=%s", date_from, date_to)
 
-        # expiry_date lives directly on stock.move and is a Date field,
-        # so compare against the raw self.date_from / self.date_to (Date),
-        # not the datetime-combined versions above.
+        # Filter by the creation date of the related scrap order, not by
+        # expiry_date on the move itself.
+        scraps = self.env["stock.scrap"].search([
+            ("create_date", ">=", date_from),
+            ("create_date", "<=", date_to),
+        ])
+        move_ids = scraps.mapped("move_ids").ids
+
         domain = [
+            ("id", "in", move_ids),
             ("state", "=", "done"),
             ("analytic_distribution", "!=", False),
-            ("expiry_date", ">=", self.date_from),
-            ("expiry_date", "<=", self.date_to),
         ]
-        _logger.info("Stock move search domain (filtered by expiry_date): %s", domain)
+        _logger.info("Stock move search domain (filtered by scrap create_date): %s", domain)
 
         moves = self.env["stock.move"].search(domain)
 
@@ -77,11 +81,11 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
 
         # ------------------------------------------------------------------
         # Build a data structure: for each account -> for each product ->
-        # aggregated {vendor, qty, amount}
+        # aggregated {vendor, qty, returned, loss}
         # Also build a global ordered list of (product_id, product, vendor)
         # so every account uses the same row order.
         # ------------------------------------------------------------------
-        account_product_data = {}  # {account_id: {product_id: {"qty":.., "amount":.., "vendor":..}}}
+        account_product_data = {}  # {account_id: {product_id: {"qty":.., "returned":.., "loss":.., "vendor":..}}}
         product_info = {}  # {product_id: {"display_name":.., "vendor":..}}
         product_order = []  # keeps first-seen order
 
@@ -92,7 +96,7 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
                 account.name, account.id, account_id_str
             )
 
-            product_data = defaultdict(lambda: {"qty": 0.0, "amount": 0.0, "vendor": ""})
+            product_data = defaultdict(lambda: {"qty": 0.0, "returned": 0.0, "loss": 0.0, "vendor": ""})
 
             for move in moves:
                 if not move.analytic_distribution:
@@ -116,8 +120,11 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
                     vendor = product.seller_ids[:1].partner_id.name if product.seller_ids else ""
                     ratio = percentage / 100.0
                     qty = move.Qty * ratio
-                    cost_price = product.standard_price
-                    amount = qty * cost_price
+
+                    list_price = product.list_price
+                    expiration_per = (product.expiration_per or 0.0) / 100.0
+                    loss_amount = qty * expiration_per * list_price
+                    returned_amount = qty * (1 - expiration_per) * list_price
 
                     pid = product.id
                     if pid not in product_info:
@@ -128,14 +135,15 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
                         product_order.append(pid)
 
                     product_data[pid]["qty"] += qty
-                    product_data[pid]["amount"] += amount
+                    product_data[pid]["returned"] += returned_amount
+                    product_data[pid]["loss"] += loss_amount
                     if vendor:
                         product_data[pid]["vendor"] = vendor
 
                     _logger.info(
-                        "  Accumulated for account=%s product=%s: qty=%s amount=%s",
+                        "  Accumulated for account=%s product=%s: qty=%s returned=%s loss=%s",
                         account.name, product.display_name,
-                        product_data[pid]["qty"], product_data[pid]["amount"]
+                        product_data[pid]["qty"], product_data[pid]["returned"], product_data[pid]["loss"]
                     )
                     break  # move already counted for this account, go to next move
 
@@ -174,7 +182,7 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
         workbook = xlsxwriter.Workbook(output, {"in_memory": True})
 
         header_fmt = workbook.add_format({
-            "bold": True, "bg_color": "#4472C4", "font_color": "white",
+            "bold": True, "bg_color": "#595959", "font_color": "white",
             "border": 1, "align": "center", "valign": "vcenter",
         })
         cell_fmt = workbook.add_format({"border": 1})
@@ -203,7 +211,16 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
             account_col_start[account.id] = start
             col = end + 1
 
+        # --- Aggregated totals block (sum across all analytic accounts) ---
+        total_col_start = col
+        sheet.merge_range(1, total_col_start, 1, total_col_start + 2, "Aggregated", header_fmt)
+        sheet.write(2, total_col_start, "Total Qty", header_fmt)
+        sheet.write(2, total_col_start + 1, "Total Returned Amt", header_fmt)
+        sheet.write(2, total_col_start + 2, "Total Loss Amt", header_fmt)
+        sheet.set_column(total_col_start, total_col_start + 2, 18)
+
         _logger.info("Account column start positions: %s", account_col_start)
+        _logger.info("Total (aggregated) column start position: %s", total_col_start)
 
         row = 3
         for pid in product_order:
@@ -211,17 +228,28 @@ class StockMoveAnalyticReportWizard(models.TransientModel):
             sheet.write(row, 0, info["display_name"], cell_fmt)
             sheet.write(row, 1, info["vendor"], cell_fmt)
 
+            total_qty = 0.0
+            total_returned = 0.0
+            total_loss = 0.0
+
             for account in accounts_with_data:
                 start = account_col_start[account.id]
                 data = account_product_data[account.id].get(pid)
                 if data:
                     sheet.write(row, start, data["qty"], cell_fmt)
-                    sheet.write(row, start + 1, data["amount"], cell_fmt)
-                    sheet.write(row, start + 2, data["amount"], cell_fmt)
+                    sheet.write(row, start + 1, data["returned"], cell_fmt)
+                    sheet.write(row, start + 2, data["loss"], cell_fmt)
+                    total_qty += data["qty"]
+                    total_returned += data["returned"]
+                    total_loss += data["loss"]
                 else:
                     sheet.write(row, start, "", cell_fmt)
                     sheet.write(row, start + 1, "", cell_fmt)
                     sheet.write(row, start + 2, "", cell_fmt)
+
+            sheet.write(row, total_col_start, total_qty, cell_fmt)
+            sheet.write(row, total_col_start + 1, total_returned, cell_fmt)
+            sheet.write(row, total_col_start + 2, total_loss, cell_fmt)
 
             row += 1
 
