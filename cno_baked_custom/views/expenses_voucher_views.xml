@@ -114,7 +114,7 @@
                   name="Configuration"
                   parent="main_menu_expenses_voucher"
                   groups="cno_baked_custom.group_expenses_voucher_conf_menu_access"
-                  sequence="10"/>
+                  sequence="2"/>
 
 
     </data>

@@ -30,7 +30,6 @@ class ExpensesVoucher(models.Model):
         for rec in self:
             rec.total_amount = sum(rec.expenses_voucher_line.mapped('amount'))
 
-
     """COUNT ALL RELATED Journal Entry"""
     def _entry_total(self):
         for rec in self:

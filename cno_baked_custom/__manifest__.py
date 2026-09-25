@@ -15,7 +15,7 @@
 
     'website': 'https://cyngro.com',
 
-    "depends": ['base','stock','product','account','mrp','point_of_sale'],
+    "depends": ['base','stock','analytic','product','account','mrp','point_of_sale'],
 
     "data": [
         'security/ir.model.access.csv',
@@ -29,11 +29,9 @@
         'views/accounting_head_views.xml',
         'views/cogs_basis_views.xml',
         'views/profit_classification_views.xml',
-        'views/res_partner_views.xml',
         'views/stock_quant_view.xml',
         'views/account_analytic_plan_view.xml',
         'views/stock_scrap_views.xml',
-        'views/account_journal_views.xml',
         # 'views/mrp_production_views.xml',
            ],
 

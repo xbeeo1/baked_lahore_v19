@@ -59,4 +59,23 @@ class AccountMoveInherit(models.Model):
 
         return res
 
+    def _get_accounting_date(self, invoice_date, has_tax):
+        # not related, just ensuring normal flow untouched
+        return super()._get_accounting_date(invoice_date, has_tax)
+
+    def _sync_dynamic_lines(self, container):
+        res = super()._sync_dynamic_lines(container)
+        for move in self:
+            if move.move_type in ('in_invoice', 'in_refund', 'out_invoice', 'out_refund'):
+                analytic_distribution = {}
+                for l in move.invoice_line_ids:
+                    if l.analytic_distribution:
+                        analytic_distribution.update(l.analytic_distribution)
+                if analytic_distribution:
+                    term_lines = move.line_ids.filtered(
+                        lambda l: l.display_type == 'payment_term'
+                    )
+                    term_lines.analytic_distribution = analytic_distribution
+        return res
+
 

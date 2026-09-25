@@ -1,5 +1,6 @@
 <odoo>
     <data>
+
         <record id="view_product_product_list_inherit" model="ir.ui.view">
             <field name="name">product.product.list.inherit</field>
             <field name="model">product.product</field>
@@ -8,6 +9,10 @@
                 <field name="name" position="before">
                     <field name="categ_id"/>
                     <field name="vendor_id"/>
+                </field>
+
+                <field name="default_code" position="after">
+                    <field name="margin_percent"/>
                 </field>
             </field>
         </record>

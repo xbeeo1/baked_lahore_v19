@@ -136,3 +136,4 @@ class StockScrap(models.Model):
 
         return res
 
+

@@ -15,10 +15,8 @@ from . import accounting_head
 from . import expenses_voucher_lines
 from . import cogs_basis
 from . import profit_classification
-from . import res_partner
-from . import account_payment
-from . import account_analytic_plan
 from . import stock_quant
+from . import account_analytic_plan
 # from . import mrp_bom_line
 # from . import mrp_report_mo_overview
 
