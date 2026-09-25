@@ -20,6 +20,13 @@
         'views/views.xml',
     ],
 
+    'assets': {
+            'point_of_sale._assets_pos': [
+                'cno_pos_custom/static/src/**/*',
+
+                    ],
+                },
+
 
 
 }

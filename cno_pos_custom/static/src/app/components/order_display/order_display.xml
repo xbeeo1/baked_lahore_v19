@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+
+    <t t-inherit="point_of_sale.OrderDisplay" t-inherit-mode="extension">
+
+        <xpath expr="//div[contains(@class, 'order-summary')]//div[contains(@class, 'fs-3')]" position="before">
+
+            <div class="d-flex justify-content-between w-100 fs-6 text-muted">
+                <span>Total Qty</span>
+                <span t-esc="order.lines.reduce((total, line) => total + line.qty, 0)"/>
+            </div>
+
+            <div class="d-flex justify-content-between w-100 fs-6 text-muted">
+                <span>Total Discount</span>
+                <span t-esc="formatCurrency(order.getTotalDiscount())"/>
+            </div>
+
+        </xpath>
+
+    </t>
+
+</templates>
